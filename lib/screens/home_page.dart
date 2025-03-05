@@ -23,8 +23,16 @@ class _HomePageState extends State<HomePage> {
           children: const <Widget>[
             Column(
               children: <Widget>[
-                TaskWidget(nameTask: "Farmar em Dragon Valley"),
-                TaskWidget(nameTask: "Farmar em Toi 4")
+                TaskWidget(
+                  nameTask: "Farm in Dragon Valley",
+                  imageTask: "assets/img/dragonValley.jpg",
+                  difficultyTask: 5,
+                ),
+                TaskWidget(
+                  nameTask: "Farm in Toi 4",
+                  imageTask: "assets/img/toi.png",
+                  difficultyTask: 3,
+                ),
               ],
             ),
           ],

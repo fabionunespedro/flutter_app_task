@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_task/widgets/difficulty_widget.dart';
 
 class TaskWidget extends StatefulWidget {
   final String nameTask;
+  final String imageTask;
+  final int difficultyTask;
 
-  const TaskWidget({super.key, required this.nameTask});
+  const TaskWidget(
+      {super.key, required this.nameTask, required this.imageTask, required this.difficultyTask});
 
   @override
   State<TaskWidget> createState() => _TaskWidgetState();
@@ -38,10 +42,23 @@ class _TaskWidgetState extends State<TaskWidget> {
                       decoration: const BoxDecoration(
                           color: Colors.black12,
                           borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: Image.asset(
+                        widget.imageTask,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                    Text(
-                      widget.nameTask,
-                      style: const TextStyle(color: Colors.black, fontSize: 16),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.nameTask,
+                          style: const TextStyle(color: Colors.black, fontSize: 16),
+                        ),
+                        DifficultyWidget(
+                          difficultyColors: widget.difficultyTask,
+                        )
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.only(right: 10),
@@ -80,7 +97,9 @@ class _TaskWidgetState extends State<TaskWidget> {
                     child: SizedBox(
                       width: 200,
                       child: LinearProgressIndicator(
-                        value: level / 10,
+                        value:
+                            (widget.difficultyTask > 0) ? (level / widget.difficultyTask) / 10 : 1,
+                        color: Colors.black,
                       ),
                     ),
                   ),
