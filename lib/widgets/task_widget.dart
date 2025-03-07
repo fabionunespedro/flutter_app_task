@@ -41,7 +41,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       height: 100,
                       decoration: const BoxDecoration(
                         color: Colors.black12,
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: BorderRadius.all(Radius.circular(3)),
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),

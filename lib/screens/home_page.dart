@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_task/screens/add_task_page.dart';
 import 'package:flutter_app_task/widgets/task_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text("App Task for Lineage 2"),
       ),
       body: Container(
-        color: Colors.black38,
+        color: Colors.white10,
         child: ListView(
           children: const <Widget>[
             Column(
@@ -39,7 +40,9 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const AddTaskPage()));
+        },
         backgroundColor: Colors.amber,
         child: const Icon(Icons.add),
       ),
