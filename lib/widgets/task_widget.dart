@@ -6,8 +6,12 @@ class TaskWidget extends StatefulWidget {
   final String imageTask;
   final int difficultyTask;
 
-  const TaskWidget(
-      {super.key, required this.nameTask, required this.imageTask, required this.difficultyTask});
+  const TaskWidget({
+    super.key,
+    required this.nameTask,
+    required this.imageTask,
+    required this.difficultyTask,
+  });
 
   @override
   State<TaskWidget> createState() => _TaskWidgetState();
@@ -15,6 +19,20 @@ class TaskWidget extends StatefulWidget {
 
 class _TaskWidgetState extends State<TaskWidget> {
   int level = 0;
+
+  Image _buildImage(String path) {
+    if (path.startsWith("http") || path.startsWith("https")) {
+      return Image.network(
+        path,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.asset("assets/img/error.png", fit: BoxFit.cover);
+        },
+      );
+    } else {
+      return Image.asset(path, fit: BoxFit.cover);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +43,18 @@ class _TaskWidgetState extends State<TaskWidget> {
           Container(
             height: 140,
             decoration: const BoxDecoration(
-                color: Colors.amber, borderRadius: BorderRadius.all(Radius.circular(5))),
+              color: Colors.amber,
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
           ),
           Column(
             children: [
               Container(
                 height: 100,
                 decoration: const BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(5))),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -45,10 +67,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: Image.asset(
-                          widget.imageTask,
-                          fit: BoxFit.cover,
-                        ),
+                        child: _buildImage(widget.imageTask),
                       ),
                     ),
                     Column(
@@ -76,10 +95,11 @@ class _TaskWidgetState extends State<TaskWidget> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(5)),
-                              )),
+                            backgroundColor: Colors.amber,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
+                            ),
+                          ),
                           child: const Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
