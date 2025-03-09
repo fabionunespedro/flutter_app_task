@@ -20,7 +20,7 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   int level = 0;
 
-  Image _buildImage(String path) {
+  Image buildImage(String path) {
     if (path.startsWith("http") || path.startsWith("https")) {
       return Image.network(
         path,
@@ -67,7 +67,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: _buildImage(widget.imageTask),
+                        child: buildImage(widget.imageTask),
                       ),
                     ),
                     Column(
