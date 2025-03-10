@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_task/widgets/difficulty_widget.dart';
 
@@ -6,20 +8,20 @@ class TaskWidget extends StatefulWidget {
   final String imageTask;
   final int difficultyTask;
 
-  const TaskWidget({
+  TaskWidget({
     super.key,
     required this.nameTask,
     required this.imageTask,
     required this.difficultyTask,
   });
 
+  int level = 0;
+
   @override
   State<TaskWidget> createState() => _TaskWidgetState();
 }
 
 class _TaskWidgetState extends State<TaskWidget> {
-  int level = 0;
-
   Image buildImage(String path) {
     if (path.startsWith("http") || path.startsWith("https")) {
       return Image.network(
@@ -91,7 +93,7 @@ class _TaskWidgetState extends State<TaskWidget> {
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              level++;
+                              widget.level++;
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -121,15 +123,16 @@ class _TaskWidgetState extends State<TaskWidget> {
                     child: SizedBox(
                       width: 200,
                       child: LinearProgressIndicator(
-                        value:
-                            (widget.difficultyTask > 0) ? (level / widget.difficultyTask) / 10 : 1,
+                        value: (widget.difficultyTask > 0)
+                            ? (widget.level / widget.difficultyTask) / 10
+                            : 1,
                         color: Colors.black,
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Text("Level: $level"),
+                    child: Text("Level: ${widget.level}"),
                   ),
                 ],
               )
