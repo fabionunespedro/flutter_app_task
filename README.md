@@ -1,16 +1,22 @@
-# flutter_app_task
+# 📱 Meu Projeto Flutter
 
-A new Flutter project.
+Bem-vindo ao repositório do **Meu Projeto Flutter**! Este projeto faz parte do meu aprendizado em desenvolvimento mobile com **Flutter**, iniciado através da Alura.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Tecnologias Utilizadas
 
-A few resources to get you started if this is your first Flutter project:
+Este projeto foi desenvolvido com as seguintes tecnologias:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Linguagem:** Dart <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Dart-logo.png" width="40">
+- **Framework:** Flutter <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Google-flutter-logo.png" width="40">
+- **Gerenciamento de Estado:** ValueNotifier
+- **Banco de Dados Local:** SQFLite
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## 📦 Pacotes Utilizados
+
+Para auxiliar no desenvolvimento, utilizamos os seguintes pacotes:
+
+- [`sqflite`](https://pub.dev/packages/sqflite) - Para banco de dados SQLite local.
