@@ -13,7 +13,34 @@ class TaskDao {
   static const String _difficulty = 'difficulty';
   static const String _image = 'image';
 
-  save(TaskWidget tarefa) async {}
+  save(TaskWidget tarefa) async {
+    print("Iniciando o Save: ");
+    final Database bancoDeDados = await getDatabase();
+    var itemExist = await find(tarefa.nameTask);
+    Map<String, dynamic> taskMap = toMap(tarefa);
+    if (itemExist.isEmpty) {
+      print("A tarefa não existia");
+      return await bancoDeDados.insert(_tablename, taskMap);
+    } else {
+      print("A tarefa ja existia: ");
+      return await bancoDeDados.update(
+        _tablename,
+        taskMap,
+        where: "$_name = ?",
+        whereArgs: [tarefa.nameTask],
+      );
+    }
+  }
+
+  Map<String, dynamic> toMap(TaskWidget tarefa) {
+    print("Convertendo Tarefa em Map: ");
+    final Map<String, dynamic> mapaDeTarefas = {};
+    mapaDeTarefas[_name] = tarefa.imageTask;
+    mapaDeTarefas[_difficulty] = tarefa.difficultyTask;
+    mapaDeTarefas[_image] = tarefa.imageTask;
+    return mapaDeTarefas;
+  }
+
   Future<List<TaskWidget>> findAll() async {
     print("Acessando o findAll: ");
     final Database bancoDeDados = await getDatabase();
@@ -46,5 +73,13 @@ class TaskDao {
     return toList(result);
   }
 
-  delete(String nomeDaTarefa) async {}
+  delete(String nomeDaTarefa) async {
+    print("Deletando tarefa: $nomeDaTarefa");
+    final Database bancoDeDados = await getDatabase();
+    return bancoDeDados.delete(
+      _tablename,
+      where: "$_name = ?",
+      whereArgs: [nomeDaTarefa],
+    );
+  }
 }
