@@ -34,6 +34,17 @@ class TaskDao {
     return tarefas;
   }
 
-  //Future<List<TaskWidget>> find(String nomeDaTarefa) async{}
+  Future<List<TaskWidget>> find(String nomeDaTarefa) async {
+    print("Acessando Find: ");
+    final Database bancoDeDados = await getDatabase();
+    final List<Map<String, dynamic>> result = await bancoDeDados.query(
+      _tablename,
+      where: "$_name = ?",
+      whereArgs: [nomeDaTarefa],
+    );
+    print("Tarefa encontrada: ${toList(result)}");
+    return toList(result);
+  }
+
   delete(String nomeDaTarefa) async {}
 }
