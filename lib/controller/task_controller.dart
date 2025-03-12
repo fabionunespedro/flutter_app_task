@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_task/widgets/task_widget.dart';
+import 'package:flutter_app_task/data/task_dao.dart';
+import 'package:flutter_app_task/model/task_model.dart';
 
-class TaskController extends ValueNotifier<List<TaskWidget>> {
-  TaskController()
-      : super([
-          TaskWidget(
-            nameTask: "Farm in Dragon Valley",
-            imageTask: "assets/img/dragonValley.jpg",
-            difficultyTask: 5,
-          ),
-          TaskWidget(
-            nameTask: "Farm in Toi 4",
-            imageTask: "assets/img/toi.png",
-            difficultyTask: 3,
-          )
-        ]);
+class TaskController extends ValueNotifier<List<TaskModel>> {
+  TaskController() : super([]) {
+    _loadTasks();
+  }
 
-  void addNewTask(String name, String image, int difficulty) {
-    value = [...value, TaskWidget(nameTask: name, imageTask: image, difficultyTask: difficulty)];
-    notifyListeners();
+  final TaskDao _dao = TaskDao();
+
+  Future<void> _loadTasks() async {
+    value = await _dao.findAll();
+  }
+
+  Future<void> addNewTask(String name, String image, int difficulty) async {
+    final newTask = TaskModel(
+      name: name,
+      image: image,
+      difficulty: difficulty,
+    );
+
+    await _dao.save(newTask);
+    await _loadTasks();
+  }
+
+  Future<void> removeTask(String name) async {
+    await _dao.delete(name);
+    await _loadTasks();
+  }
+
+  Future<void> clearAllTasks() async {
+    await _dao.clearAll();
+    await _loadTasks();
   }
 }

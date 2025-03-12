@@ -4,7 +4,15 @@ import 'package:path/path.dart';
 
 Future<Database> getDatabase() async {
   final String path = join(await getDatabasesPath(), 'task.db');
-  return openDatabase(path, onCreate: (db, version) {
-    db.execute(TaskDao.tablesql);
-  }, version: 1);
+  return openDatabase(
+    path,
+    version: 1,
+    onCreate: (db, version) {
+      db.execute(TaskDao.tableSql);
+    },
+    onUpgrade: (db, oldVersion, newVersion) {
+      db.execute("DROP TABLE IF EXISTS taskTable");
+      db.execute(TaskDao.tableSql);
+    },
+  );
 }

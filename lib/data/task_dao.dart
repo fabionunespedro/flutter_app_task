@@ -1,85 +1,68 @@
 import 'package:flutter_app_task/data/database.dart';
-import 'package:flutter_app_task/widgets/task_widget.dart';
+import 'package:flutter_app_task/model/task_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class TaskDao {
-  static const String tablesql = 'CREATE TABLE $_tablename('
-      '$_name TEXT, '
-      '$_difficulty INTEGER, '
-      '$_image TEXT)';
+  static const String tableSql = '''
+    CREATE TABLE $_tableName (
+      $_name TEXT PRIMARY KEY,
+      $_image TEXT,
+      $_difficulty INTEGER
+    )
+  ''';
 
-  static const String _tablename = 'taskTable';
+  static const String _tableName = 'taskTable';
   static const String _name = 'name';
-  static const String _difficulty = 'difficulty';
   static const String _image = 'image';
+  static const String _difficulty = 'difficulty';
 
-  save(TaskWidget tarefa) async {
-    print("Iniciando o Save: ");
-    final Database bancoDeDados = await getDatabase();
-    var itemExist = await find(tarefa.nameTask);
-    Map<String, dynamic> taskMap = toMap(tarefa);
-    if (itemExist.isEmpty) {
-      print("A tarefa não existia");
-      return await bancoDeDados.insert(_tablename, taskMap);
+  Future<void> save(TaskModel task) async {
+    final Database db = await getDatabase();
+    var existingTask = await find(task.name);
+
+    if (existingTask == null) {
+      await db.insert(_tableName, task.toMap());
     } else {
-      print("A tarefa ja existia: ");
-      return await bancoDeDados.update(
-        _tablename,
-        taskMap,
-        where: "$_name = ?",
-        whereArgs: [tarefa.nameTask],
+      await db.update(
+        _tableName,
+        task.toMap(),
+        where: '$_name = ?',
+        whereArgs: [task.name],
       );
     }
   }
 
-  Map<String, dynamic> toMap(TaskWidget tarefa) {
-    print("Convertendo Tarefa em Map: ");
-    final Map<String, dynamic> mapaDeTarefas = {};
-    mapaDeTarefas[_name] = tarefa.imageTask;
-    mapaDeTarefas[_difficulty] = tarefa.difficultyTask;
-    mapaDeTarefas[_image] = tarefa.imageTask;
-    return mapaDeTarefas;
+  Future<List<TaskModel>> findAll() async {
+    final Database db = await getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(_tableName);
+    return result.map((e) => TaskModel.fromMap(e)).toList();
   }
 
-  Future<List<TaskWidget>> findAll() async {
-    print("Acessando o findAll: ");
-    final Database bancoDeDados = await getDatabase();
-    final List<Map<String, dynamic>> result = await bancoDeDados.query(_tablename);
-    print("Procurando dados no banco de dados... encontrando: $result");
-    return toList(result);
-  }
+  Future<TaskModel?> find(String taskName) async {
+    final Database db = await getDatabase();
+    final List<Map<String, dynamic>> result = await db.query(
+      _tableName,
+      where: '$_name = ?',
+      whereArgs: [taskName],
+    );
 
-  List<TaskWidget> toList(List<Map<String, dynamic>> mapaDeTarefas) {
-    print("Convertendo to List: ");
-    final List<TaskWidget> tarefas = [];
-    for (Map<String, dynamic> linha in mapaDeTarefas) {
-      final TaskWidget tarefa = TaskWidget(
-          nameTask: linha[_name], imageTask: linha[_image], difficultyTask: linha[_difficulty]);
-      tarefas.add(tarefa);
+    if (result.isNotEmpty) {
+      return TaskModel.fromMap(result.first);
     }
-    print("Lista de Tarefas $tarefas");
-    return tarefas;
+    return null;
   }
 
-  Future<List<TaskWidget>> find(String nomeDaTarefa) async {
-    print("Acessando Find: ");
-    final Database bancoDeDados = await getDatabase();
-    final List<Map<String, dynamic>> result = await bancoDeDados.query(
-      _tablename,
-      where: "$_name = ?",
-      whereArgs: [nomeDaTarefa],
+  Future<void> delete(String taskName) async {
+    final Database db = await getDatabase();
+    await db.delete(
+      _tableName,
+      where: '$_name = ?',
+      whereArgs: [taskName],
     );
-    print("Tarefa encontrada: ${toList(result)}");
-    return toList(result);
   }
 
-  delete(String nomeDaTarefa) async {
-    print("Deletando tarefa: $nomeDaTarefa");
+  Future<void> clearAll() async {
     final Database bancoDeDados = await getDatabase();
-    return bancoDeDados.delete(
-      _tablename,
-      where: "$_name = ?",
-      whereArgs: [nomeDaTarefa],
-    );
+    await bancoDeDados.delete(_tableName);
   }
 }

@@ -143,10 +143,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Saving new task")),
-                          );
-
                           Navigator.pop(context, {
                             'name': nameController.text,
                             'image': imageController.text,
